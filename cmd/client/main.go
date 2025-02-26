@@ -20,12 +20,14 @@ func main() {
 
 	ctx := context.Background()
 
-	response, err := client.SaveNote(ctx, &desc.SaveNoteRequest{
+	req := &desc.SaveNoteRequest{
 		Info: &desc.NoteInfo{
 			Title:   "t1",
 			Content: "c1",
 		},
-	})
+	}
+
+	response, err := client.SaveNote(ctx, req)
 	if err != nil {
 		panic(err)
 	}

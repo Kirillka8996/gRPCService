@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-
+import "vendor-proto/validate/validate.proto";
 option go_package = "pkg/api/notes/v1;notes";
 
 service Notes {
@@ -18,21 +18,27 @@ service Notes {
 }
 
 message NoteInfo {
-    string title = 1;
-    string content = 2;
+    string title = 1 [(validate.rules).string = {
+        min_len:3,
+        max_len:140,
+    }];
+    string content = 2 [(validate.rules).string = {
+        min_len:10,
+        max_len:1500,
+    }];
 }
 
 message Note {
     uint64 node_id = 1;
-    NoteInfo info = 2;
+    NoteInfo info = 2 [(validate.rules).message.required = true];
 }
 
 message SaveNoteRequest {
-    NoteInfo info = 1;
+    NoteInfo info = 1 [(validate.rules).message.required = true];
 }
 
 message SaveNoteResponse {
-    uint64 note_id = 1;
+    uint64 note_id = 1; 
 }
 
 message ListNotesResponse {
@@ -42,7 +48,7 @@ message ListNotesResponse {
 
 message UpdateNoteRequest {
     uint64 note_id = 1;
-    NoteInfo info = 2;
+    NoteInfo info = 2 [(validate.rules).message.required = true];
 }
 message UpdateNoteResponse {
     Note note = 1;

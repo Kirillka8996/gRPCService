@@ -22,7 +22,7 @@ func main() {
 
 	req := &desc.SaveNoteRequest{
 		Info: &desc.NoteInfo{
-			Title:   "t1",
+			Title:   "t",
 			Content: "c1",
 		},
 	}

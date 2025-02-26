@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net"
 	"notes/internal/app/notes"
+	"notes/internal/mw"
 	desc "notes/pkg/api/notes/v1"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 const (
@@ -18,7 +20,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(mw.Validate),
+	)
+
+	reflection.Register(grpcServer)
 
 	controller := notes.NewService()
 

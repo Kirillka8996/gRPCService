@@ -19,7 +19,6 @@ func NewService() *Service {
 }
 
 func (Service) SaveNote(ctx context.Context, r *desc.SaveNoteRequest) (*desc.SaveNoteResponse, error) {
-
 	return nil, status.Errorf(codes.Unimplemented, "method SaveNote not implemented")
 }
 

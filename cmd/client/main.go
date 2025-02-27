@@ -6,6 +6,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 
 	desc "notes/pkg/api/notes/v1"
 )
@@ -19,11 +20,11 @@ func main() {
 	client := desc.NewNotesClient(conn)
 
 	ctx := context.Background()
-
+	ctx = metadata.AppendToOutgoingContext(ctx, "x-auth", "user1")
 	req := &desc.SaveNoteRequest{
 		Info: &desc.NoteInfo{
-			Title:   "t",
-			Content: "c1",
+			Title:   "tdddddddddd",
+			Content: "cdddddddddd",
 		},
 	}
 

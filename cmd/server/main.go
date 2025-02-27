@@ -21,7 +21,13 @@ func main() {
 		panic(err)
 	}
 	grpcServer := grpc.NewServer(
-		grpc.ChainUnaryInterceptor(mw.Validate),
+		grpc.ChainUnaryInterceptor(
+			mw.Panic,
+			mw.Logger,
+			mw.Panic,
+			mw.Validate,
+			mw.Validate,
+		),
 	)
 
 	reflection.Register(grpcServer)

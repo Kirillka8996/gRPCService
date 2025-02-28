@@ -1,20 +1,44 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "vendor-proto/validate/validate.proto";
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+
 option go_package = "pkg/api/notes/v1;notes";
 
 service Notes {
 
-    rpc SaveNote(SaveNoteRequest) returns (SaveNoteResponse) {}
+    rpc SaveNote(SaveNoteRequest) returns (SaveNoteResponse) {
+        option(google.api.http) = {
+            post: "/v1/note",
+            body: "info"
+        };
+    }
 
-    rpc ListNotes(google.protobuf.Empty) returns (ListNotesResponse) {}
+    rpc ListNotes(google.protobuf.Empty) returns (ListNotesResponse) {
+        option(google.api.http) = {
+            get: "/v1/notes",
+        };
+    }
 
-    rpc GetNoteById(GetNoteRequest) returns (GetNoteResponse) {}
+    rpc GetNoteById(GetNoteRequest) returns (GetNoteResponse) {
+        option(google.api.http) = {
+            get: "/v1/notes/{note_id}",
+        };
+    }
 
-    rpc DeleteNoteById(DeleteNoteRequest) returns (DeleteNoteResponse) {}
+    rpc DeleteNoteById(DeleteNoteRequest) returns (DeleteNoteResponse) {
+        option(google.api.http) = {
+            delete: "/v1/notes/{note_id}",
+        };
+    }
 
-    rpc UpdateNoteById(UpdateNoteRequest) returns (UpdateNoteResponse) {}
+    rpc UpdateNoteById(UpdateNoteRequest) returns (UpdateNoteResponse) {
+        option(google.api.http) = {
+            put: "/v1/notes/{note_id}",
+            body: "info"
+        };
+    }
 }
 
 message NoteInfo {

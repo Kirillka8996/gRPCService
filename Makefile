@@ -18,7 +18,8 @@ vendor-proto/google/protobuf:
 
 	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1 && \
 	GOBIN=$(LOCAL_BIN) go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0 && \
-	GOBIN=$(LOCAL_BIN) go install github.com/envoyproxy/protoc-gen-validate@v1.0.4
+	GOBIN=$(LOCAL_BIN) go install github.com/envoyproxy/protoc-gen-validate@v1.0.4 &&\
+	GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.19.1
 
 
 NOTES_PROTO_PATH := "api/notes/v1"
@@ -34,11 +35,22 @@ vendor-proto/validate:
 	rm -rf vendor-proto/tmp
 
 
+vendor-proto/google/api:
+	git clone -b master --single-branch --depth=1 --filter=tree:0 \
+		https://github.com/googleapis/googleapis vendor-proto/googleapis &&\
+	cd vendor-proto/googleapis &&\
+	git sparse-checkout set --no-cone google/api &&\
+	git checkout
+	mkdir -p vendor-proto/google
+	mv vendor-proto/googleapis/google/api vendor-proto/google
+	rm -rf vendor-proto/googleapis
+
+
 
 .vendor-rm:
 	rm -rf vendor-proto
 
-.vendor-proto: .vendor-rm vendor-proto/google/protobuf vendor-proto/validate
+.vendor-proto: .vendor-rm vendor-proto/google/protobuf vendor-proto/validate vendor-proto/google/api
 
 .PHONY: .protoc-generate
 .protoc-generate: .bin-deps .vendor-proto
@@ -53,6 +65,9 @@ vendor-proto/validate:
 	--go-grpc_opt paths=source_relative \
 	--plugin=protoc-gen-validate=$(LOCAL_BIN)/protoc-gen-validate \
 	--validate_out="lang=go,paths=source_relative:pkg/api/notes/v1" \
+	--plugin=protoc-gen-grpc-gateway=$(LOCAL_BIN)/protoc-gen-grpc-gateway \
+	--grpc-gateway_out pkg/${NOTES_PROTO_PATH} \
+	--grpc-gateway_opt logtostderr=true --grpc-gateway_opt paths=source_relative --grpc-gateway_opt generate_unbound_methods=true \
 	api/notes/v1/notes.proto
 	go mod tidy
 

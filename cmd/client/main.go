@@ -13,10 +13,10 @@ import (
 
 func main() {
 	conn, err := grpc.NewClient(":50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
-
 	if err != nil {
 		panic(err)
 	}
+
 	client := desc.NewNotesClient(conn)
 
 	ctx := context.Background()

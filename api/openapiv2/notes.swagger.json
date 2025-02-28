@@ -1,0 +1,272 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "notes.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Notes"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/note": {
+      "post": {
+        "operationId": "Notes_SaveNote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SaveNoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "info",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NoteInfo"
+            }
+          }
+        ],
+        "tags": [
+          "Notes"
+        ]
+      }
+    },
+    "/v1/notes": {
+      "get": {
+        "operationId": "Notes_ListNotes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListNotesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Notes"
+        ]
+      }
+    },
+    "/v1/notes/{noteId}": {
+      "get": {
+        "operationId": "Notes_GetNoteById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetNoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "noteId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "Notes"
+        ]
+      },
+      "delete": {
+        "operationId": "Notes_DeleteNoteById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteNoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "noteId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "Notes"
+        ]
+      },
+      "put": {
+        "operationId": "Notes_UpdateNoteById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateNoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "noteId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "info",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NoteInfo"
+            }
+          }
+        ],
+        "tags": [
+          "Notes"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "DeleteNoteResponse": {
+      "type": "object",
+      "properties": {
+        "isDelete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "GetNoteResponse": {
+      "type": "object",
+      "properties": {
+        "isExist": {
+          "type": "boolean"
+        },
+        "note": {
+          "$ref": "#/definitions/Note"
+        }
+      }
+    },
+    "ListNotesResponse": {
+      "type": "object",
+      "properties": {
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/Note"
+          }
+        }
+      }
+    },
+    "Note": {
+      "type": "object",
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "info": {
+          "$ref": "#/definitions/NoteInfo"
+        }
+      }
+    },
+    "NoteInfo": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "SaveNoteResponse": {
+      "type": "object",
+      "properties": {
+        "noteId": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "UpdateNoteResponse": {
+      "type": "object",
+      "properties": {
+        "note": {
+          "$ref": "#/definitions/Note"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
